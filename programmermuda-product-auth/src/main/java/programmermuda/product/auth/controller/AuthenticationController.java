@@ -12,6 +12,7 @@ import programmermuda.product.auth.services.JwtService;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:8081")
 public class AuthenticationController {
 
     private final JwtService jwtService;
