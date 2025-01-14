@@ -10,7 +10,7 @@ public class LoginUserDto {
         return email;
     }
 
-    public v setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
