@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Welcome to the Home Page</h1>
+
+<!-- Menampilkan data pengguna jika ada -->
+<div th:if="${userData != null}">
+    <p th:text="'Hello, ' + ${userData}">User data</p>
+</div>
+
+<!-- Menampilkan pesan error jika ada -->
+<div th:if="${error != null}">
+    <p th:text="${error}"></p>
+</div>
+<a href="/login">Logout</a>
+</body>
+</html>
