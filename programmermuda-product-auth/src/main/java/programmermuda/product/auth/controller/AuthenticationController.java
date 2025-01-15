@@ -1,6 +1,7 @@
 package programmermuda.product.auth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import programmermuda.product.auth.dto.LoginResponse;
@@ -32,7 +33,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(registeredUser);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto){
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 

@@ -35,27 +35,44 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest, Model model){
+    public String login(@RequestParam String email,
+                        @RequestParam String password,
+                        Model model,
+                        HttpSession httpSession){
         String loginUrl = backendUrl + "/auth/login";
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setEmail(email);
+        loginRequest.setPassword(password);
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<LoginRequest> requestHttpEntity = new HttpEntity<>(loginRequest, headers);
 
-        ResponseEntity<LoginResponse> responseEntity =
-                restTemplate.exchange(loginUrl, HttpMethod.POST, requestHttpEntity, LoginResponse.class);
+        try {
+            ResponseEntity<LoginResponse> responseEntity =
+                    restTemplate.exchange(loginUrl, HttpMethod.POST, requestHttpEntity, LoginResponse.class);
 
-        if (responseEntity.getStatusCode().is2xxSuccessful()){
-            LoginResponse loginResponse = responseEntity.getBody();
+            if (responseEntity.getStatusCode().is2xxSuccessful()){
+                LoginResponse loginResponse = responseEntity.getBody();
 
-            model.addAttribute("accessToken", loginResponse.getToken());
-            model.addAttribute("expiresToken", loginResponse.getExpiresIn());
+               httpSession.setAttribute("token", loginResponse.getToken());
+               model.addAttribute("message", "Login successful!");
 
-            return "home";
-        }else {
-            model.addAttribute("error", "Login failed");
-            return "login";
+                return "redirect:/home";
+            }
+
+        }catch (HttpClientErrorException exception){
+            model.addAttribute("error", "Login failed : " + exception.getMessage());
         }
+
+        return "login";
+    }
+
+    @GetMapping("/home")
+    public String homePage(){
+        return "home";
     }
 
 
