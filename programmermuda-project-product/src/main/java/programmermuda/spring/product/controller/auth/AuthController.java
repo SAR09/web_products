@@ -66,7 +66,7 @@ public class AuthController {
         }catch (HttpClientErrorException exception){
             String errorMessage = "Login failed";
             if (exception.getStatusCode().is4xxClientError()){
-                errorMessage = "Username or password incorrect";
+                errorMessage = "Email or password incorrect";
             } else if (exception.getStatusCode().is5xxServerError()) {
                 errorMessage = "Server error, please try again";
             }

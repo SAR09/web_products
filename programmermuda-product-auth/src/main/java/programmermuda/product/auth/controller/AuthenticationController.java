@@ -11,12 +11,13 @@ import programmermuda.product.auth.dto.LoginResponse;
 import programmermuda.product.auth.dto.LoginUserDto;
 import programmermuda.product.auth.dto.RegisterUserDto;
 import programmermuda.product.auth.entity.User;
+import programmermuda.product.auth.exceptions.EmailAlreadyExistsException;
 import programmermuda.product.auth.services.AuthenticationService;
 import programmermuda.product.auth.services.JwtService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:8081")
+//@CrossOrigin(origins = "http://localhost:8081")
 public class AuthenticationController {
 
     private final JwtService jwtService;
@@ -30,10 +31,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto){
-        User registeredUser = authenticationService.signup(registerUserDto);
+    public ResponseEntity<?> register(@RequestBody RegisterUserDto registerUserDto){
+        try {
+            User registeredUser = authenticationService.signup(registerUserDto);
 
-        return ResponseEntity.ok(registeredUser);
+            return ResponseEntity.ok(registeredUser);
+        }catch (EmailAlreadyExistsException exception){
+            throw exception;
+        }catch (IllegalArgumentException exception){
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
     }
 
     @PostMapping(value = "/login")

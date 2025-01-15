@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +70,17 @@ public class GlobalExceptionHandler {
                 errors.put(error.getField(), error.getDefaultMessage())
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<?> handleEmailAlreadyExceptions(EmailAlreadyExistsException exception){
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
+        ApiExceptionsResponse apiExceptionsResponse = new ApiExceptionsResponse(
+                exception.getMessage(),
+                httpStatus,
+                ZonedDateTime.now(ZoneId.of("Asia/Jakarta"))
+        );
+        return new ResponseEntity<>(apiExceptionsResponse, httpStatus);
     }
 
 }

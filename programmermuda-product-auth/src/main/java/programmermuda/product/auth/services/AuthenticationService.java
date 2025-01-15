@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import programmermuda.product.auth.dto.LoginUserDto;
 import programmermuda.product.auth.dto.RegisterUserDto;
 import programmermuda.product.auth.entity.User;
+import programmermuda.product.auth.exceptions.EmailAlreadyExistsException;
 import programmermuda.product.auth.repository.UserRepository;
 
 @Service
@@ -25,6 +26,11 @@ public class AuthenticationService {
     }
 
     public User signup(RegisterUserDto input) {
+
+        if (userRepository.existsByEmail(input.getEmail())){
+            throw new EmailAlreadyExistsException("Email already registered");
+        }
+
         User user = new User();
         user.setFullName(input.getFullName());
         user.setEmail(input.getEmail());
