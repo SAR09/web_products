@@ -64,7 +64,14 @@ public class AuthController {
             }
 
         }catch (HttpClientErrorException exception){
-            model.addAttribute("error", "Login failed : " + exception.getMessage());
+            String errorMessage = "Login failed";
+            if (exception.getStatusCode().is4xxClientError()){
+                errorMessage = "Username or password incorrect";
+            } else if (exception.getStatusCode().is5xxServerError()) {
+                errorMessage = "Server error, please try again";
+            }
+
+            model.addAttribute("error", errorMessage);
         }
 
         return "login";

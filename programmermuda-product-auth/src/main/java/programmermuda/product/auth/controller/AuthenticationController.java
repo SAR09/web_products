@@ -1,8 +1,11 @@
 package programmermuda.product.auth.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import programmermuda.product.auth.dto.LoginResponse;
 import programmermuda.product.auth.dto.LoginUserDto;
@@ -34,7 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto){
+    public ResponseEntity<?> authenticate(@Valid @RequestBody LoginUserDto loginUserDto){
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         String jwtToken = jwtService.generateToken(authenticatedUser);

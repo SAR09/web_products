@@ -1,8 +1,14 @@
 package programmermuda.spring.product.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginRequest {
 
+//    @Email
+//    @NotBlank(message = "Email cannot be empty")
     private String email;
+
 
     private String password;
 

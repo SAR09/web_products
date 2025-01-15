@@ -2,15 +2,21 @@ package programmermuda.product.auth.exceptions;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.nio.file.AccessDeniedException;
 import java.security.SignatureException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -54,4 +60,14 @@ public class GlobalExceptionHandler {
 
         return errorDetail;
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception){
+        Map<String, String> errors = new HashMap<>();
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
 }

@@ -8,11 +8,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SpringBootApplication
 public class ProgrammermudaProjectProductApplication {
 
-//	@Bean
-//	public WebClient webClient(){
-//		return
-//				WebClient.builder().baseUrl("http://localhost:8080").build();
-//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProgrammermudaProjectProductApplication.class, args);
